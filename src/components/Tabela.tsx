@@ -145,7 +145,7 @@ export default function Tabela() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {lista.map((row: any) => (
+                  {lista.map((row: Recado) => (
                     <StyledTableRow>
                       <StyledTableCell>
                         <Typography variant="h5">
