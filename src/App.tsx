@@ -4,13 +4,17 @@ import ThemeDefault from "./config/theme/Default";
 
 import AppRoutes from "./routes/AppRoutes";
 import StylesGlobal from "./config/GlobalStyles";
+import { Provider } from "react-redux";
+import { store } from "./store";
 
 const App: React.FC = () => {
   return (
-    <ThemeProvider theme={ThemeDefault}>
-      <StylesGlobal />
-      <AppRoutes />
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider theme={ThemeDefault}>
+        <StylesGlobal />
+        <AppRoutes />
+      </ThemeProvider>
+    </Provider>
   );
 };
 
