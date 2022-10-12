@@ -7,7 +7,7 @@ import TextSnippetIcon from "@mui/icons-material/TextSnippet";
 
 export default function Header() {
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, margin: 0 }}>
       <AppBar position="static">
         <Grid container>
           <Grid

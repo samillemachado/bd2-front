@@ -3,6 +3,7 @@ import {
   Container,
   Dialog,
   DialogTitle,
+  Grid,
   Stack,
   TextField,
   Typography,
@@ -16,6 +17,7 @@ import {
   updateRecado,
 } from "../store/modules/recados/RecadosSlice";
 import Recado from "../types/Recado";
+import StatusControl from "./StatusControl";
 
 interface ModalRecadoProps {
   isOpen: boolean;
@@ -104,6 +106,9 @@ const ModalRecado: React.FC<ModalRecadoProps> = ({
           value={descricao}
           onChange={(e) => setDescricao(e.target.value)}
         />
+        <Grid item xs={12} sx={{ mt: 2, mb: 3 }}>
+          <StatusControl />
+        </Grid>
         <Container sx={{ mt: 2, mb: 3 }}>
           <Stack direction="row" spacing={2}>
             <Button

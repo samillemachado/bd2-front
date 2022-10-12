@@ -5,6 +5,7 @@ const StylesGlobal: React.FC = () => {
   return (
     <GlobalStyles
       styles={{
+        body: { margin: 0 },
         a: { textDecoration: "none", color: "inherit" },
       }}
     />

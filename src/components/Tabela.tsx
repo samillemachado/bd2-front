@@ -11,6 +11,7 @@ import { Button, Grid, IconButton, Typography } from "@mui/material";
 import { Stack } from "@mui/system";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
+import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import ModalRecado from "./Modal";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
@@ -20,6 +21,16 @@ import {
   selectAll,
 } from "../store/modules/recados/RecadosSlice";
 import Recado from "../types/Recado";
+import Arquivo from "./Arquivo";
+import Search from "./Search";
+import Fab from "@mui/material/Fab";
+import AddIcon from "@mui/icons-material/Add";
+
+const fabStyle = {
+  position: "absolute",
+  bottom: 16,
+  right: 16,
+};
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -71,19 +82,34 @@ export default function Tabela() {
     openModal();
   };
 
+  const arquivarRecado = (id: number) => {};
+
   const listaRecadosRdx = useAppSelector(selectAll);
 
   return (
     <>
-      <Grid container xs={12}>
+      <Grid container xs={12} sx={{ padding: 2 }}>
+        <Fab
+          color="primary"
+          aria-label="add"
+          size="large"
+          onClick={openModal}
+          sx={{ position: "absolute", bottom: 24, right: 24 }}
+        >
+          <AddIcon />
+        </Fab>
         <Grid
           item
           xs={12}
-          sx={{ my: 2, display: "flex", justifyContent: "center" }}
+          sx={{
+            my: 2,
+            display: "flex",
+            justifyContent: "space-around",
+            alignItems: "center",
+          }}
         >
-          <Button variant="contained" onClick={openModal}>
-            NOVO RECADO
-          </Button>
+          <Search />
+          <Arquivo />
         </Grid>
         <Grid item xs={12}>
           <TableContainer component={Paper}>
@@ -91,6 +117,7 @@ export default function Tabela() {
               <TableHead>
                 <TableRow>
                   <StyledTableCell>#ID</StyledTableCell>
+                  <StyledTableCell align="center">STATUS</StyledTableCell>
                   <StyledTableCell align="center">TÍTULO</StyledTableCell>
                   <StyledTableCell align="center">DESCRIÇÃO</StyledTableCell>
                   <StyledTableCell align="center">AÇÕES</StyledTableCell>
@@ -100,9 +127,12 @@ export default function Tabela() {
                 {listaRecadosRdx.map((row: any) => (
                   <StyledTableRow key={row.id}>
                     <StyledTableCell>
-                      <Typography variant="h5">
+                      <Typography variant="h6">
                         <b>{row.id}</b>
                       </Typography>
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      <Typography>status</Typography>
                     </StyledTableCell>
                     <StyledTableCell align="center">
                       {row.titulo}
@@ -121,6 +151,9 @@ export default function Tabela() {
                         </IconButton>
                         <IconButton onClick={() => editarRecado(row.id)}>
                           <EditIcon sx={{ fontSize: 35 }} />
+                        </IconButton>
+                        <IconButton onClick={() => arquivarRecado(row.id)}>
+                          <SaveAltIcon sx={{ fontSize: 35 }} />
                         </IconButton>
                       </Stack>
                     </StyledTableCell>
