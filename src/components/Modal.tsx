@@ -1,9 +1,15 @@
 import {
+  Box,
   Button,
   Container,
   Dialog,
   DialogTitle,
+  FormControl,
   Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
   Stack,
   TextField,
   Typography,
@@ -16,8 +22,7 @@ import {
   updateOne,
   updateRecado,
 } from "../store/modules/recados/RecadosSlice";
-import Recado from "../types/Recado";
-import StatusControl from "./StatusControl";
+import { Recado } from "../types/Types";
 
 interface ModalRecadoProps {
   isOpen: boolean;
@@ -33,8 +38,10 @@ const ModalRecado: React.FC<ModalRecadoProps> = ({
   const dispatch = useAppDispatch();
 
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const [titulo, setTitulo] = useState<string>("Titulo inicial");
-  const [descricao, setDescricao] = useState<string>("Descricao inicial");
+  const [titulo, setTitulo] = useState<string>("");
+  const [descricao, setDescricao] = useState<string>("");
+  const [statusRec, setStatusRec] = useState<string>("");
+  const [isArquivado, setIsArquivado] = useState<boolean>(false);
 
   useEffect(() => {
     setOpenModal(isOpen);
@@ -44,6 +51,7 @@ const ModalRecado: React.FC<ModalRecadoProps> = ({
       if (recadoEncontrado) {
         setTitulo(recadoEncontrado.titulo);
         setDescricao(recadoEncontrado.descricao);
+        setStatusRec(recadoEncontrado.statusRec);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -52,14 +60,17 @@ const ModalRecado: React.FC<ModalRecadoProps> = ({
   const cleanModal = () => {
     setTitulo("");
     setDescricao("");
+    setStatusRec("");
   };
 
   const salvarRecado = () => {
     const novoRecado: Recado = {
       titulo,
       descricao,
+      statusRec,
+      isArquivado,
     };
-
+    console.log("Novo rec" + novoRecado);
     dispatch(postRecado(novoRecado));
     closeModal();
   };
@@ -75,12 +86,19 @@ const ModalRecado: React.FC<ModalRecadoProps> = ({
         id: idEdition!,
         titulo: titulo,
         descricao: descricao,
+        statusRec: statusRec,
+        isArquivado: isArquivado,
       })
     );
     dispatch(
       updateOne({
         id: idEdition!,
-        changes: { titulo: titulo, descricao: descricao },
+        changes: {
+          titulo: titulo,
+          descricao: descricao,
+          statusRec: statusRec,
+          isArquivado: isArquivado,
+        },
       })
     );
     closeModal();
@@ -107,7 +125,24 @@ const ModalRecado: React.FC<ModalRecadoProps> = ({
           onChange={(e) => setDescricao(e.target.value)}
         />
         <Grid item xs={12} sx={{ mt: 2, mb: 3 }}>
-          <StatusControl />
+          <Box sx={{ minWidth: 120 }}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Status</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={statusRec}
+                label="Status *"
+                onChange={(event: SelectChangeEvent) =>
+                  setStatusRec(event.target.value as string)
+                }
+              >
+                <MenuItem value={"TODO"}>TO DO</MenuItem>
+                <MenuItem value={"DOING"}>DOING</MenuItem>
+                <MenuItem value={"DONE"}>DONE</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
         </Grid>
         <Container sx={{ mt: 2, mb: 3 }}>
           <Stack direction="row" spacing={2}>

@@ -1,8 +1,8 @@
 import { combineReducers } from "@reduxjs/toolkit";
 import recados from "./recados/RecadosSlice";
-import recado from "./recados/RecadoSlice";
+import badge from "./componentes/BadgeSlice";
 
 export default combineReducers({
-  recado,
   recados,
+  badge,
 });

@@ -1,10 +1,10 @@
 import axios from "axios";
-import Recado from "../../../types/Recado";
+import { Recado } from "../../../types/Types";
 
 //API
 
 const api = axios.create({
-  baseURL: "https://hidden-hamlet-78084.herokuapp.com/sistemaRecados/recado",
+  baseURL: "http://localhost:8080/sistemaRecados/recado",
 });
 
 async function getAllApi(url: string): Promise<Recado[]> {
@@ -27,4 +27,12 @@ async function updateOneApi(id: number, data: Recado): Promise<Recado> {
   return response.data;
 }
 
-export { getAllApi, postOneApi, deleteOneApi, updateOneApi };
+async function filterApi(
+  url: string,
+  params: { filtro: string; campo: string; status: string }
+): Promise<Recado[]> {
+  const response = await api.get(url, { params });
+  return response.data;
+}
+
+export { getAllApi, postOneApi, deleteOneApi, updateOneApi, filterApi };

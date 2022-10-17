@@ -5,11 +5,12 @@ import {
 } from "@reduxjs/toolkit";
 import {
   deleteOneApi,
+  filterApi,
   getAllApi,
   postOneApi,
   updateOneApi,
 } from "../../../service/api/heroku/api";
-import Recado from "../../../types/Recado";
+import { Recado, FiltroRecado } from "../../../types/Types";
 import { RootState } from "../..";
 
 export const getAllRecados = createAsyncThunk(
@@ -26,7 +27,7 @@ export const postRecado = createAsyncThunk(
   "recados/postRecado",
   async (dado: Recado) => {
     const response = await postOneApi(dado)
-      .then((recados) => recados)
+      .then((recado) => recado)
       .catch((erro) => erro);
     return response;
   }
@@ -37,7 +38,7 @@ export const updateRecado = createAsyncThunk(
   async (dado: Recado) => {
     const { id } = dado;
     const response = await updateOneApi(id!, dado)
-      .then((recado) => recado)
+      .then((recados) => recados)
       .catch((erro) => erro);
     return response;
   }
@@ -53,6 +54,25 @@ export const deleteRecado = createAsyncThunk(
     return response;
   }
 );
+
+export const filterRecado = createAsyncThunk(
+  "recados/filtrarRecado",
+  async (dado: FiltroRecado) => {
+    const response: Recado[] = await filterApi("/filtrar", {
+      filtro: dado.filtro,
+      campo: dado.campo,
+      status: dado.statusRecado,
+    })
+      .then((recados) => recados)
+      .catch((erro) => erro);
+    return response;
+  }
+);
+
+export const toFileRecado = (recado: Recado) => {
+  if (recado.isArquivado === true) {
+  }
+};
 
 const adapter = createEntityAdapter<Recado>({
   selectId: (item) => item.id!,

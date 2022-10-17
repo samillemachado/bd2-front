@@ -18,12 +18,12 @@ export default function Header() {
             <TextSnippetIcon sx={{ fontSize: 40, color: "white" }} />
             <Typography variant="h4" sx={{ color: "white", marginLeft: 2 }}>
               {" "}
-              <b> API - CRUD</b>
+              <b> API - CRUD DE RECADOS</b>
             </Typography>
           </Grid>
           <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
             <Typography variant="subtitle1" sx={{ padding: 1 }}>
-              Trabalho final módulo IV
+              Trabalho Final de Módulo - Back End I
             </Typography>
           </Grid>
         </Grid>

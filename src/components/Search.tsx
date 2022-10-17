@@ -1,11 +1,16 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import InputBase from "@mui/material/InputBase";
-import SearchIcon from "@mui/icons-material/Search";
+import Grid from "@mui/material/Grid";
+import Button from "@mui/material/Button";
+import { FiltroRecado } from "../types/Types";
+import { useAppDispatch } from "../store/hooks";
+import { filterRecado } from "../store/modules/recados/RecadosSlice";
+import { SelectChangeEvent } from "@mui/material";
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
   "label + &": {
@@ -41,51 +46,88 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
 }));
 
 const Search: React.FC = () => {
-  const [age, setAge] = React.useState("");
-  const handleChange = (event: { target: { value: string } }) => {
-    setAge(event.target.value);
+  const dispatch = useAppDispatch();
+
+  const [filtro, setFiltro] = useState<string>("");
+  const [campo, setCampo] = useState<string>("");
+  const [statusRecado, setStatusRecado] = useState<string>("");
+
+  const aplicarFiltro = () => {
+    const novoFiltro: FiltroRecado = {
+      filtro,
+      campo,
+      statusRecado,
+    };
+    dispatch(filterRecado(novoFiltro));
+    //MOSTRAR COMO NA TELA?
   };
   return (
-    <div>
-      <FormControl sx={{ m: 1 }} variant="standard">
-        <InputLabel htmlFor="demo-customized-textbox">Buscar:</InputLabel>
-        <BootstrapInput id="demo-customized-textbox" />
+    <Grid
+      item
+      xs={12}
+      sm={6}
+      sx={{
+        display: "flex",
+        alignContent: "center",
+        flexDirection: "row",
+        alignItems: "baseline",
+      }}
+    >
+      <FormControl sx={{ mx: 1 }} variant="standard">
+        <InputLabel htmlFor="demo-customized-textbox">Filtrar por:</InputLabel>
+        <BootstrapInput
+          id="demo-customized-textbox"
+          value={filtro}
+          onChange={(e) => setFiltro(e.target.value)}
+        />
       </FormControl>
-      <FormControl sx={{ m: 1 }} variant="standard">
+      <FormControl sx={{ mx: 1 }} variant="standard">
         <InputLabel id="demo-customized-select-label">Em:</InputLabel>
         <Select
           labelId="demo-customized-select-label"
           id="demo-customized-select"
-          value={age}
-          onChange={handleChange}
+          value={filtro}
+          onChange={(event: SelectChangeEvent) =>
+            setCampo(event.target.value as string)
+          }
           input={<BootstrapInput />}
         >
-          <MenuItem value="">
+          <MenuItem value={"TUDO"}>
             <em>Tudo</em>
           </MenuItem>
           <MenuItem value={10}>TÍTULO</MenuItem>
           <MenuItem value={20}>DESCRIÇÃO</MenuItem>
         </Select>
       </FormControl>
-      <FormControl sx={{ m: 1 }} variant="standard">
+      <FormControl sx={{ mx: 1 }} variant="standard">
         <InputLabel id="demo-customized-select-label">Status:</InputLabel>
         <Select
           labelId="demo-customized-select-label"
           id="demo-customized-select"
-          value={age}
-          onChange={handleChange}
+          value={statusRecado}
+          onChange={(event: SelectChangeEvent) =>
+            setStatusRecado(event.target.value as string)
+          }
           input={<BootstrapInput />}
         >
-          <MenuItem value="">
+          <MenuItem value={"TUDO"}>
             <em>Tudo</em>
           </MenuItem>
-          <MenuItem value={10}>TODO</MenuItem>
-          <MenuItem value={20}>DOING</MenuItem>
-          <MenuItem value={30}>DONE</MenuItem>
+          <MenuItem value={"TODO"}>TODO</MenuItem>
+          <MenuItem value={"DOING"}>DOING</MenuItem>
+          <MenuItem value={"DONE"}>DONE</MenuItem>
         </Select>
       </FormControl>
-      <SearchIcon />
-    </div>
+      <FormControl
+        sx={{
+          mx: 1,
+        }}
+        variant="standard"
+      ></FormControl>
+      <Button variant="outlined" size="large" onClick={() => aplicarFiltro()}>
+        FILTRAR
+      </Button>
+    </Grid>
   );
 };
 
