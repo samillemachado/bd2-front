@@ -4,7 +4,7 @@ import { Recado } from "../../../types/Types";
 //API
 
 const api = axios.create({
-  baseURL: "http://localhost:8080/sistemaRecados/recado",
+  baseURL: "https://hidden-hamlet-78084.herokuapp.com/sistemaRecados/recado",
 });
 
 async function getAllApi(url: string): Promise<Recado[]> {
