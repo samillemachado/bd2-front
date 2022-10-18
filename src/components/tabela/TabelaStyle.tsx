@@ -4,7 +4,7 @@ import { styled } from "@mui/material/styles";
 
 export const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: "#333",
     color: theme.palette.common.white,
   },
   [`&.${tableCellClasses.body}`]: {

@@ -21,6 +21,7 @@ import {
   selectAll,
   updateOne,
   updateRecado,
+  filterRecado,
 } from "../../store/modules/recados/RecadosSlice";
 import { Recado } from "../../types/Types";
 import BadgeButton from "../BadgeButton";
@@ -31,17 +32,20 @@ import { upBadgeNum } from "../../store/modules/componentes/BadgeSlice";
 
 export default function Tabela() {
   const dispatch = useAppDispatch();
+  const filtro = useAppSelector((state) => state.filter);
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [idRecado, setIdRecado] = useState<number>();
   const [isArquivado, setIsArquivado] = useState<boolean>(false);
   const [isButtonClicked, setIsButtonClicked] = useState<boolean>(false);
-  const [isFilterActive, setIsFilterActive] = useState<boolean>(false);
 
   useEffect(() => {
     dispatch(getAllRecados());
+    if (filtro) {
+      dispatch(filterRecado(filtro));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isButtonClicked]);
+  }, [isButtonClicked, filtro]);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -112,8 +116,9 @@ export default function Tabela() {
           sx={{
             my: 2,
             display: "flex",
+            flexDirection: "column",
             justifyContent: "space-around",
-            alignItems: "end",
+            alignItems: "center",
           }}
         >
           <Filter />

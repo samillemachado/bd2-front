@@ -12,7 +12,7 @@ const FilterSlice = createSlice({
   initialState,
   reducers: {
     create(state, action) {
-      return console.log(action.payload);
+      return action.payload;
     },
     clear() {
       return initialState;

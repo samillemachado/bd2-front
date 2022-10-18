@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import MenuItem from "@mui/material/MenuItem";
-import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import { FiltroRecado } from "../types/Types";
@@ -46,6 +45,10 @@ const valuesStatus = [
 const Filter: React.FC = () => {
   const dispatch = useAppDispatch();
 
+  const [filtro, setFiltro] = useState<string>("");
+  const [campo, setCampo] = useState<string>("");
+  const [statusRecado, setStatusRecado] = useState<string>("");
+
   const handleChangeCampos = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCampo(event.target.value);
   };
@@ -54,85 +57,128 @@ const Filter: React.FC = () => {
     setStatusRecado(event.target.value);
   };
 
-  const [filtro, setFiltro] = useState<string>("");
-  const [campo, setCampo] = useState<string>("");
-  const [statusRecado, setStatusRecado] = useState<string>("");
-
   const aplicarFiltro = () => {
     const novoFiltro: FiltroRecado = {
       filtro,
       campo,
       statusRecado,
     };
+    console.log(novoFiltro);
+    if (novoFiltro.campo === "TUDO") {
+      novoFiltro.campo = "";
+    }
+    if (novoFiltro.statusRecado === "TUDO") {
+      novoFiltro.statusRecado = "";
+    }
     dispatch(filterRecado(novoFiltro));
-    console.log("aqui");
     dispatch(create(novoFiltro));
+    limpaFiltro();
   };
+
+  const limpaFiltro = () => {
+    setFiltro("");
+    setCampo("");
+    setStatusRecado("");
+  };
+
   return (
     <Grid
       item
       xs={12}
-      sm={8}
       sx={{
+        m1: 1,
         display: "flex",
         alignContent: "center",
-        flexDirection: "row",
+        justifyContent: "center",
       }}
     >
-      <Box
+      <Grid
+        item
+        xs={12}
         component="form"
         sx={{
           display: "flex",
           alignContent: "center",
-          flexDirection: "row",
-          alignItems: "end",
+          alignItems: "center",
           justifyContent: "center",
           "& .MuiTextField-root": { m: 1, width: "20ch" },
         }}
         noValidate
         autoComplete="off"
       >
-        <TextField
-          id="outlined-basic"
-          label="Filtrar por:"
-          variant="standard"
-          value={filtro}
-          onChange={(e) => setFiltro(e.target.value)}
-        />
-        <div>
+        <Grid
+          item
+          xs={12}
+          sx={{
+            display: "flex",
+            alignContent: "center",
+            alignItems: "end",
+            justifyContent: "center",
+          }}
+        >
           <TextField
-            id="outlined-select-currency"
-            select
-            label="Campo"
-            value={campo}
-            onChange={handleChangeCampos}
+            id="outlined-basic"
+            label="Filtrar por:"
             variant="standard"
+            value={filtro}
+            onChange={(e) => setFiltro(e.target.value)}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <div
+            style={{
+              display: "flex",
+              alignContent: "center",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
           >
-            {valuesCampos.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            id="outlined-select-currency"
-            select
-            label="Status"
-            value={statusRecado}
-            onChange={handleChangeStatus}
-            variant="standard"
-          >
-            {valuesStatus.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </TextField>
-        </div>
-      </Box>
-      <Button variant="outlined" size="large" onClick={() => aplicarFiltro()}>
-        FILTRAR
-      </Button>
+            <TextField
+              id="outlined-select-currency"
+              select
+              label="Campo"
+              value={campo}
+              onChange={handleChangeCampos}
+              variant="standard"
+            >
+              {valuesCampos.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+            <TextField
+              id="outlined-select-currency"
+              select
+              label="Status"
+              value={statusRecado}
+              onChange={handleChangeStatus}
+              variant="standard"
+            >
+              {valuesStatus.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+          </div>
+        </Grid>
+      </Grid>
+      <Grid
+        item
+        xs={12}
+        sx={{
+          my: 1,
+          display: "flex",
+          alignContent: "center",
+          alignItems: "end",
+          justifyContent: "center",
+        }}
+      >
+        <Button variant="outlined" size="large" onClick={() => aplicarFiltro()}>
+          FILTRAR
+        </Button>
+      </Grid>
     </Grid>
   );
 };
