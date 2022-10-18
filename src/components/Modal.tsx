@@ -41,13 +41,12 @@ const ModalRecado: React.FC<ModalRecadoProps> = ({
   const [titulo, setTitulo] = useState<string>("");
   const [descricao, setDescricao] = useState<string>("");
   const [statusRec, setStatusRec] = useState<string>("");
-  const [isArquivado, setIsArquivado] = useState<boolean>(false);
+  const [isArquivado] = useState<boolean>(false);
 
   useEffect(() => {
     setOpenModal(isOpen);
     cleanModal();
     if (idEdition) {
-      // setIdEdicao(idEdition);
       if (recadoEncontrado) {
         setTitulo(recadoEncontrado.titulo);
         setDescricao(recadoEncontrado.descricao);
@@ -70,7 +69,6 @@ const ModalRecado: React.FC<ModalRecadoProps> = ({
       statusRec,
       isArquivado,
     };
-    console.log("Novo rec" + novoRecado);
     dispatch(postRecado(novoRecado));
     closeModal();
   };

@@ -58,21 +58,16 @@ export const deleteRecado = createAsyncThunk(
 export const filterRecado = createAsyncThunk(
   "recados/filtrarRecado",
   async (dado: FiltroRecado) => {
-    const response: Recado[] = await filterApi("/filtrar", {
+    const response: Recado[] = await filterApi("/filter", {
       filtro: dado.filtro,
       campo: dado.campo,
-      status: dado.statusRecado,
+      statusRecado: dado.statusRecado,
     })
       .then((recados) => recados)
       .catch((erro) => erro);
     return response;
   }
 );
-
-export const toFileRecado = (recado: Recado) => {
-  if (recado.isArquivado === true) {
-  }
-};
 
 const adapter = createEntityAdapter<Recado>({
   selectId: (item) => item.id!,
@@ -108,6 +103,10 @@ const RecadosSlice = createSlice({
     builder.addCase(deleteRecado.fulfilled, (state, action) => {
       state.loading = false;
       adapter.removeOne(state, action.payload);
+    });
+    builder.addCase(filterRecado.fulfilled, (state, action) => {
+      state.loading = false;
+      adapter.setAll(state, action.payload);
     });
   },
 });

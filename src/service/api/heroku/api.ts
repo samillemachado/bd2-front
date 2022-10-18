@@ -29,7 +29,7 @@ async function updateOneApi(id: number, data: Recado): Promise<Recado> {
 
 async function filterApi(
   url: string,
-  params: { filtro: string; campo: string; status: string }
+  params: { filtro: string; campo: string; statusRecado: string }
 ): Promise<Recado[]> {
   const response = await api.get(url, { params });
   return response.data;
