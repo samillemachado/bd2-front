@@ -63,7 +63,6 @@ const Filter: React.FC = () => {
       campo,
       statusRecado,
     };
-    console.log(novoFiltro);
     if (novoFiltro.campo === "TUDO") {
       novoFiltro.campo = "";
     }
