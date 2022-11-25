@@ -16,7 +16,7 @@ import { RootState } from "../..";
 export const getAllRecados = createAsyncThunk(
   "recados/getAllRecados",
   async () => {
-    const response: Recado[] = await getAllApi("/all")
+    const response: Recado[] = await getAllApi("/recados/all")
       .then((recados) => recados)
       .catch((erro) => erro);
     return response;
@@ -38,7 +38,7 @@ export const updateRecado = createAsyncThunk(
   async (dado: Recado) => {
     const { id } = dado;
     const response = await updateOneApi(id!, dado)
-      .then((recados) => recados)
+      .then((recado) => recado)
       .catch((erro) => erro);
     return response;
   }
@@ -58,7 +58,7 @@ export const deleteRecado = createAsyncThunk(
 export const filterRecado = createAsyncThunk(
   "recados/filtrarRecado",
   async (dado: FiltroRecado) => {
-    const response: Recado[] = await filterApi("/filter", {
+    const response: Recado[] = await filterApi("/recados/filter", {
       filtro: dado.filtro,
       campo: dado.campo,
       statusRecado: dado.statusRecado,
