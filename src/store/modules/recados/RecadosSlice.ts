@@ -16,7 +16,7 @@ import { RootState } from "../..";
 export const getAllRecados = createAsyncThunk(
   "recados/getAllRecados",
   async () => {
-    const response: Recado[] = await getAllApi("/recados/all")
+    const response: Recado[] = await getAllApi("/recados")
       .then((recados) => recados)
       .catch((erro) => erro);
     return response;
@@ -26,7 +26,7 @@ export const getAllRecados = createAsyncThunk(
 export const postRecado = createAsyncThunk(
   "recados/postRecado",
   async (dado: Recado) => {
-    const response = await postOneApi(dado)
+    const response = await postOneApi("/recados", dado)
       .then((recado) => recado)
       .catch((erro) => erro);
     return response;
