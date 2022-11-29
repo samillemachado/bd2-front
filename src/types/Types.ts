@@ -1,9 +1,22 @@
 export interface Recado {
   id?: number;
-  titulo: string;
-  descricao: string;
+  title: string;
+  description: string;
   statusRec: string;
   isArquivado?: boolean;
+  userId?: number;
+}
+
+export interface User {
+  id?: number;
+  name: string;
+  email: string;
+  pass: string;
+}
+
+export interface UserLogando {
+  email: string;
+  pass: string;
 }
 
 export interface FiltroRecado {

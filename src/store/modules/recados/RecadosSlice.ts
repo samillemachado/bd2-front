@@ -15,8 +15,13 @@ import { RootState } from "../..";
 
 export const getAllRecados = createAsyncThunk(
   "recados/getAllRecados",
-  async () => {
-    const response: Recado[] = await getAllApi("/recados")
+  async (userId?: number) => {
+    let url = "/recados";
+    if (userId) {
+      url = url.concat(`?userId/${userId}`);
+    }
+
+    const response: Recado[] = await getAllApi(url)
       .then((recados) => recados)
       .catch((erro) => erro);
     return response;

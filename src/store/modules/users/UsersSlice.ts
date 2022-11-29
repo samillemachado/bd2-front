@@ -22,7 +22,7 @@ export const getAllUsers = createAsyncThunk("users/getAllUsers", async () => {
 export const postUser = createAsyncThunk(
   "users/postUser",
   async (dado: User) => {
-    const response = await postOneApi(dado)
+    const response = await postOneApi("/users", dado)
       .then((user) => user)
       .catch((erro) => erro);
     return response;
@@ -61,13 +61,33 @@ export const { selectAll, selectById } = adapter.getSelectors(
 
 const UsersSlice = createSlice({
   name: "users",
-  initialState: adapter.getInitialState(),
+  initialState: adapter.getInitialState({
+    loading: false,
+  }),
   reducers: {
     addOne: adapter.addOne,
-    addMany: adapter.addMany,
     updateOne: adapter.updateOne,
+    removeOne: adapter.removeOne,
+  },
+  extraReducers(builder) {
+    builder.addCase(getAllUsers.fulfilled, (state, action) => {
+      state.loading = false;
+      adapter.setAll(state, action.payload);
+    });
+    builder.addCase(postUser.fulfilled, (state, action) => {
+      state.loading = false;
+      adapter.addOne(state, action.payload);
+    });
+    builder.addCase(updateUser.fulfilled, (state, action) => {
+      state.loading = false;
+      adapter.updateOne(state, action.payload);
+    });
+    builder.addCase(deleteUser.fulfilled, (state, action) => {
+      state.loading = false;
+      adapter.removeOne(state, action.payload);
+    });
   },
 });
 
-export const { addOne, addMany, updateOne } = UsersSlice.actions;
+export const { addOne, updateOne, removeOne } = UsersSlice.actions;
 export default UsersSlice.reducer;

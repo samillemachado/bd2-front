@@ -15,6 +15,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
   postRecado,
@@ -37,9 +38,11 @@ const ModalRecado: React.FC<ModalRecadoProps> = ({
 }) => {
   const dispatch = useAppDispatch();
 
+  const location = useLocation();
+
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const [titulo, setTitulo] = useState<string>("");
-  const [descricao, setDescricao] = useState<string>("");
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
   const [statusRec, setStatusRec] = useState<string>("");
   const [isArquivado] = useState<boolean>(false);
 
@@ -48,8 +51,8 @@ const ModalRecado: React.FC<ModalRecadoProps> = ({
     cleanModal();
     if (idEdition) {
       if (recadoEncontrado) {
-        setTitulo(recadoEncontrado.titulo);
-        setDescricao(recadoEncontrado.descricao);
+        setTitle(recadoEncontrado.title);
+        setDescription(recadoEncontrado.description);
         setStatusRec(recadoEncontrado.statusRec);
       }
     }
@@ -57,17 +60,18 @@ const ModalRecado: React.FC<ModalRecadoProps> = ({
   }, [isOpen]);
 
   const cleanModal = () => {
-    setTitulo("");
-    setDescricao("");
+    setTitle("");
+    setDescription("");
     setStatusRec("");
   };
 
   const salvarRecado = () => {
     const novoRecado: Recado = {
-      titulo,
-      descricao,
+      title: title,
+      description: description,
       statusRec,
       isArquivado,
+      userId: location.state.id,
     };
     dispatch(postRecado(novoRecado));
     closeModal();
@@ -82,20 +86,22 @@ const ModalRecado: React.FC<ModalRecadoProps> = ({
     dispatch(
       updateRecado({
         id: idEdition!,
-        titulo: titulo,
-        descricao: descricao,
+        title: title,
+        description: description,
         statusRec: statusRec,
         isArquivado: isArquivado,
+        userId: location.state.id,
       })
     );
     dispatch(
       updateOne({
         id: idEdition!,
         changes: {
-          titulo: titulo,
-          descricao: descricao,
+          title: title,
+          description: description,
           statusRec: statusRec,
           isArquivado: isArquivado,
+          userId: location.state.id,
         },
       })
     );
@@ -113,14 +119,14 @@ const ModalRecado: React.FC<ModalRecadoProps> = ({
         <Typography variant="subtitle1">Titulo</Typography>
         <TextField
           fullWidth
-          value={titulo}
-          onChange={(e) => setTitulo(e.target.value)}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
         />
         <Typography variant="subtitle1">Descricao</Typography>
         <TextField
           fullWidth
-          value={descricao}
-          onChange={(e) => setDescricao(e.target.value)}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
         />
         <Grid item xs={12} sx={{ mt: 2, mb: 3 }}>
           <Box sx={{ minWidth: 120 }}>

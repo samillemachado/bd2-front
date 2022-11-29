@@ -29,18 +29,22 @@ import Filter from "../Filter";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import { upBadgeNum } from "../../store/modules/componentes/BadgeSlice";
+import { useLocation } from "react-router-dom";
 
 export default function Tabela() {
   const dispatch = useAppDispatch();
   const filtro = useAppSelector((state) => state.filter);
+  const userLogado = useAppSelector((state) => state.userLogado);
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [idRecado, setIdRecado] = useState<number>();
   const [isArquivado, setIsArquivado] = useState<boolean>(false);
   const [isButtonClicked, setIsButtonClicked] = useState<boolean>(false);
 
+  const location = useLocation();
+
   useEffect(() => {
-    dispatch(getAllRecados());
+    dispatch(getAllRecados(userLogado.id));
     if (filtro) {
       dispatch(filterRecado(filtro));
     }
@@ -79,8 +83,8 @@ export default function Tabela() {
     dispatch(
       updateRecado({
         id: recado.id!,
-        titulo: recado.titulo,
-        descricao: recado.descricao,
+        title: recado.title,
+        description: recado.description,
         statusRec: recado.statusRec,
         isArquivado: !recado.isArquivado,
       })
@@ -93,6 +97,7 @@ export default function Tabela() {
   };
 
   const listaRecadosRdx = useAppSelector(selectAll);
+  console.log(listaRecadosRdx);
 
   const sizeLista = listaRecadosRdx.filter(
     (recado) => recado.isArquivado === true
@@ -155,10 +160,10 @@ export default function Tabela() {
                           {recado.statusRec}
                         </StyledTableCell>
                         <StyledTableCell align="center">
-                          {recado.titulo}
+                          {recado.title}
                         </StyledTableCell>
                         <StyledTableCell align="center">
-                          {recado.descricao}
+                          {recado.description}
                         </StyledTableCell>
                         <StyledTableCell align="center">
                           <Stack
