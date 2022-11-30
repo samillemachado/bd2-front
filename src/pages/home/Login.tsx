@@ -12,7 +12,10 @@ import {
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { User, UserLogando } from "../../types/Types";
 import { setUserLogado } from "../../store/modules/users/UserLogado";
-import { getAllUsers, selectAll } from "../../store/modules/users/UsersSlice";
+import {
+  getAllUsers,
+  selectAllUsers,
+} from "../../store/modules/users/UsersSlice";
 import { useNavigate } from "react-router-dom";
 
 export const LoginStyled = styled(Grid)({
@@ -44,7 +47,7 @@ export const PaperStyled = styled(Paper)({
 
 const Login: React.FC = () => {
   const dispatch = useAppDispatch();
-  const usersRedux = useAppSelector(selectAll);
+  const usersRedux = useAppSelector(selectAllUsers);
 
   const [email, setEmail] = useState<string>("");
   const [pass, setPass] = useState<string>("");

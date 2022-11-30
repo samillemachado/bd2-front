@@ -17,13 +17,14 @@ async function postOneApi<T>(url: string, data: T): Promise<T> {
   return response.data;
 }
 
-async function deleteOneApi(id: number): Promise<void> {
-  const response = await api.delete(`/${id}`);
+async function deleteOneApi(url: string, id: number): Promise<void> {
+  const response = await api.delete(`${url}/${id}`);
+  console.log(response.data);
   return response.data;
 }
 
-async function updateOneApi<T>(id: number, data: T): Promise<T> {
-  const response = await api.put(`/${id}`, data);
+async function updateOneApi<T>(url: string, id: number, data: T): Promise<T> {
+  const response = await api.put(`${url}/${id}`, data);
   return response.data;
 }
 

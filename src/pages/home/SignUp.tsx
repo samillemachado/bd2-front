@@ -1,22 +1,18 @@
 import { Button, TextField, Typography, Link } from "@mui/material";
 import React, { useState } from "react";
 import { useAppDispatch } from "../../store/hooks";
-import { getAllUsers, postUser } from "../../store/modules/users/UsersSlice";
+import { postUser } from "../../store/modules/users/UsersSlice";
 import { User } from "../../types/Types";
 import { PaperStyled, LoginStyled } from "./Login";
 
 const SignUp: React.FC = () => {
   const dispatch = useAppDispatch();
-  const usersExistentes = dispatch(getAllUsers());
 
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [pass, setPass] = useState<string>("");
 
   const handleSignUp = () => {
-    localStorage.setItem("name", `${name}`);
-    localStorage.setItem("email", `${email}`);
-    localStorage.setItem("pass", `${pass}`);
     saveUser();
   };
 
@@ -25,10 +21,11 @@ const SignUp: React.FC = () => {
       name,
       email,
       pass,
+      recados: [],
     };
     dispatch(postUser(newUser));
     alert("Conta criada com sucesso!");
-    // window.location.href = "/";
+    window.location.href = "/";
   };
 
   return (

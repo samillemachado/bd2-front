@@ -18,7 +18,7 @@ import {
   deleteRecado,
   removeOne,
   getAllRecados,
-  selectAll,
+  selectAllRecados,
   updateOne,
   updateRecado,
   filterRecado,
@@ -29,6 +29,11 @@ import Filter from "../Filter";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import { upBadgeNum } from "../../store/modules/componentes/BadgeSlice";
+import { setUserLogado } from "../../store/modules/users/UserLogado";
+import {
+  getAllUsers,
+  selectAllUsers,
+} from "../../store/modules/users/UsersSlice";
 import { useLocation } from "react-router-dom";
 
 export default function Tabela() {
@@ -44,12 +49,14 @@ export default function Tabela() {
   const location = useLocation();
 
   useEffect(() => {
-    dispatch(getAllRecados(userLogado.id));
+    dispatch(setUserLogado(location.state));
+    dispatch(getAllRecados(userLogado.id!));
+    dispatch(getAllUsers());
     if (filtro) {
       dispatch(filterRecado(filtro));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isButtonClicked, filtro]);
+  }, [isButtonClicked, filtro, userLogado]);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -87,6 +94,7 @@ export default function Tabela() {
         description: recado.description,
         statusRec: recado.statusRec,
         isArquivado: !recado.isArquivado,
+        userId: userLogado.id,
       })
     );
     dispatch(upBadgeNum(sizeLista));
@@ -96,8 +104,7 @@ export default function Tabela() {
     setIsButtonClicked(!isButtonClicked);
   };
 
-  const listaRecadosRdx = useAppSelector(selectAll);
-  console.log(listaRecadosRdx);
+  const listaRecadosRdx = useAppSelector(selectAllRecados);
 
   const sizeLista = listaRecadosRdx.filter(
     (recado) => recado.isArquivado === true

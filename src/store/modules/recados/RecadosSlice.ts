@@ -42,7 +42,8 @@ export const updateRecado = createAsyncThunk(
   "recados/updateRecado",
   async (dado: Recado) => {
     const { id } = dado;
-    const response = await updateOneApi(id!, dado)
+    console.log("entrei");
+    const response = await updateOneApi("/recados", id!, dado)
       .then((recado) => recado)
       .catch((erro) => erro);
     return response;
@@ -53,7 +54,7 @@ export const deleteRecado = createAsyncThunk(
   "recados/deleteRecado",
   async (dado: Recado) => {
     const { id } = dado;
-    const response = await deleteOneApi(id!)
+    const response = await deleteOneApi("/recados", id!)
       .then(() => "Recado deletado com sucesso")
       .catch(() => "Erro ao deletar o recado");
     return response;
@@ -78,7 +79,7 @@ const adapter = createEntityAdapter<Recado>({
   selectId: (item) => item.id!,
 });
 
-export const { selectAll, selectById } = adapter.getSelectors(
+export const { selectAll: selectAllRecados, selectById } = adapter.getSelectors(
   (state: RootState) => state.recados
 );
 
@@ -104,6 +105,7 @@ const RecadosSlice = createSlice({
     builder.addCase(updateRecado.fulfilled, (state, action) => {
       state.loading = false;
       adapter.updateOne(state, action.payload);
+      console.log("update");
     });
     builder.addCase(deleteRecado.fulfilled, (state, action) => {
       state.loading = false;

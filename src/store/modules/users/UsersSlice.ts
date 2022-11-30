@@ -33,7 +33,7 @@ export const updateUser = createAsyncThunk(
   "users/updateUser",
   async (dado: User) => {
     const { id } = dado;
-    const response = await updateOneApi(id!, dado)
+    const response = await updateOneApi("/users", id!, dado)
       .then((user) => user)
       .catch((erro) => erro);
     return response;
@@ -44,7 +44,7 @@ export const deleteUser = createAsyncThunk(
   "users/deleteUser",
   async (dado: User) => {
     const { id } = dado;
-    const response = await deleteOneApi(id!)
+    const response = await deleteOneApi("/users", id!)
       .then(() => "Usuário deletado com sucesso")
       .catch(() => "Erro ao deletar o usuário");
     return response;
@@ -55,7 +55,7 @@ const adapter = createEntityAdapter<User>({
   selectId: (item) => item.id!,
 });
 
-export const { selectAll, selectById } = adapter.getSelectors(
+export const { selectAll: selectAllUsers, selectById } = adapter.getSelectors(
   (state: RootState) => state.users
 );
 
