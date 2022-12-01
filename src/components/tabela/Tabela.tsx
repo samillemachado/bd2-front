@@ -21,42 +21,54 @@ import {
   selectAllRecados,
   updateOne,
   updateRecado,
-  filterRecado,
 } from "../../store/modules/recados/RecadosSlice";
-import { Recado } from "../../types/Types";
+import { Recado, User, UserLogando } from "../../types/Types";
 import BadgeButton from "../BadgeButton";
 import Filter from "../Filter";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import { upBadgeNum } from "../../store/modules/componentes/BadgeSlice";
-import { setUserLogado } from "../../store/modules/users/UserLogado";
+import { useLocation } from "react-router-dom";
 import {
   getAllUsers,
   selectAllUsers,
 } from "../../store/modules/users/UsersSlice";
-import { useLocation } from "react-router-dom";
 
 export default function Tabela() {
+  const location = useLocation();
+  const userLogando: UserLogando = location.state;
+
   const dispatch = useAppDispatch();
-  const filtro = useAppSelector((state) => state.filter);
-  const userLogado = useAppSelector((state) => state.userLogado);
+  // const filtro = useAppSelector((state) => state.filter);
+  // const userLogado = useAppSelector(selectUserLogado);
+
+  const usersRdx = useAppSelector(selectAllUsers);
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [idRecado, setIdRecado] = useState<number>();
   const [isArquivado, setIsArquivado] = useState<boolean>(false);
   const [isButtonClicked, setIsButtonClicked] = useState<boolean>(false);
 
-  const location = useLocation();
+  //traz todos os recados do userId
+  const listaRecadosUsersRdx = useAppSelector(selectAllRecados);
 
+  const emailUserLogando = localStorage.getItem("userLogando.email");
+
+  const userLogado: User | undefined = usersRdx.find(
+    (user) => user.email === emailUserLogando
+  );
+  //ENTREI NA PÁGINA
   useEffect(() => {
-    dispatch(setUserLogado(location.state));
-    dispatch(getAllRecados(userLogado.id!));
-    dispatch(getAllUsers());
-    if (filtro) {
-      dispatch(filterRecado(filtro));
+    if (userLogado) {
+      dispatch(getAllRecados(userLogado.id!));
+      console.log(userLogado.name);
     }
+
+    // if (filtro) {
+    //   dispatch(filterRecado(filtro));
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isButtonClicked, filtro, userLogado]);
+  }, [isButtonClicked, usersRdx, userLogado, emailUserLogando]);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -70,6 +82,8 @@ export default function Tabela() {
   const deletarRecado = (recado: Recado) => {
     dispatch(deleteRecado(recado));
     dispatch(removeOne(recado.id!));
+    dispatch(getAllUsers());
+    //UPDATE USER
   };
 
   const editarRecado = (id: number) => {
@@ -94,7 +108,7 @@ export default function Tabela() {
         description: recado.description,
         statusRec: recado.statusRec,
         isArquivado: !recado.isArquivado,
-        userId: userLogado.id,
+        userId: userLogado!.id,
       })
     );
     dispatch(upBadgeNum(sizeLista));
@@ -104,9 +118,7 @@ export default function Tabela() {
     setIsButtonClicked(!isButtonClicked);
   };
 
-  const listaRecadosRdx = useAppSelector(selectAllRecados);
-
-  const sizeLista = listaRecadosRdx.filter(
+  const sizeLista = listaRecadosUsersRdx.filter(
     (recado) => recado.isArquivado === true
   ).length;
 
@@ -151,7 +163,7 @@ export default function Tabela() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {listaRecadosRdx
+                {listaRecadosUsersRdx
                   .filter(
                     (recado: Recado) => recado.isArquivado === isButtonClicked
                   )

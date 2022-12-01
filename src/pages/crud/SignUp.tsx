@@ -1,5 +1,6 @@
 import { Button, TextField, Typography, Link } from "@mui/material";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../store/hooks";
 import { postUser } from "../../store/modules/users/UsersSlice";
 import { User } from "../../types/Types";
@@ -7,6 +8,7 @@ import { PaperStyled, LoginStyled } from "./Login";
 
 const SignUp: React.FC = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -25,7 +27,7 @@ const SignUp: React.FC = () => {
     };
     dispatch(postUser(newUser));
     alert("Conta criada com sucesso!");
-    window.location.href = "/";
+    navigate("/");
   };
 
   return (

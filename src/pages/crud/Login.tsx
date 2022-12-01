@@ -11,12 +11,11 @@ import {
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { User, UserLogando } from "../../types/Types";
-import { setUserLogado } from "../../store/modules/users/UserLogado";
+import { useNavigate } from "react-router-dom";
 import {
   getAllUsers,
   selectAllUsers,
 } from "../../store/modules/users/UsersSlice";
-import { useNavigate } from "react-router-dom";
 
 export const LoginStyled = styled(Grid)({
   backgroundColor: defaultTheme.palette.primary.main,
@@ -65,9 +64,8 @@ const Login: React.FC = () => {
     );
 
     if (userExistente) {
-      dispatch(setUserLogado(userExistente));
-
-      navigate("/home", { state: userExistente });
+      localStorage.setItem("userLogando.email", `${userLogando.email}`);
+      navigate("/home");
     } else {
       alert("Usuário ou senha inválida!");
     }

@@ -18,7 +18,7 @@ export const getAllRecados = createAsyncThunk(
   async (userId?: number) => {
     let url = "/recados";
     if (userId) {
-      url = url.concat(`?userId/${userId}`);
+      url = url.concat(`?userId=${userId}`);
     }
 
     const response: Recado[] = await getAllApi(url)
@@ -105,7 +105,6 @@ const RecadosSlice = createSlice({
     builder.addCase(updateRecado.fulfilled, (state, action) => {
       state.loading = false;
       adapter.updateOne(state, action.payload);
-      console.log("update");
     });
     builder.addCase(deleteRecado.fulfilled, (state, action) => {
       state.loading = false;

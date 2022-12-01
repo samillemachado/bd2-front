@@ -7,6 +7,7 @@ import { RootState } from "../..";
 import {
   deleteOneApi,
   getAllApi,
+  getByIdApi,
   postOneApi,
   updateOneApi,
 } from "../../../service/api/heroku/api";
@@ -18,6 +19,17 @@ export const getAllUsers = createAsyncThunk("users/getAllUsers", async () => {
     .catch((erro) => erro);
   return response;
 });
+
+export const getByIdUser = createAsyncThunk(
+  "users/getByIdUser",
+  async (dado: User) => {
+    const { id } = dado;
+    const response = await getByIdApi("/users", id!)
+      .then((user) => user)
+      .catch((erro) => erro);
+    return response;
+  }
+);
 
 export const postUser = createAsyncThunk(
   "users/postUser",
