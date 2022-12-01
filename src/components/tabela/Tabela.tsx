@@ -48,6 +48,7 @@ export default function Tabela() {
   const [idRecado, setIdRecado] = useState<number>();
   const [isArquivado, setIsArquivado] = useState<boolean>(false);
   const [isButtonClicked, setIsButtonClicked] = useState<boolean>(false);
+  const [userId, setUserId] = useState<number>();
 
   //traz todos os recados do userId
   const listaRecadosUsersRdx = useAppSelector(selectAllRecados);
@@ -61,14 +62,14 @@ export default function Tabela() {
   useEffect(() => {
     if (userLogado) {
       dispatch(getAllRecados(userLogado.id!));
-      console.log(userLogado.name);
+      setUserId(userLogado.id!);
     }
 
     // if (filtro) {
     //   dispatch(filterRecado(filtro));
     // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isButtonClicked, usersRdx, userLogado, emailUserLogando]);
+  }, [isButtonClicked, userLogado]);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -82,8 +83,6 @@ export default function Tabela() {
   const deletarRecado = (recado: Recado) => {
     dispatch(deleteRecado(recado));
     dispatch(removeOne(recado.id!));
-    dispatch(getAllUsers());
-    //UPDATE USER
   };
 
   const editarRecado = (id: number) => {
@@ -121,6 +120,11 @@ export default function Tabela() {
   const sizeLista = listaRecadosUsersRdx.filter(
     (recado) => recado.isArquivado === true
   ).length;
+
+  useEffect(() => {
+    dispatch(getAllUsers());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sizeLista]);
 
   return (
     <>
@@ -215,6 +219,7 @@ export default function Tabela() {
         isOpen={isModalOpen}
         actionCancel={closeModal}
         idEdition={idRecado}
+        userId={userId!}
       ></ModalRecado>
     </>
   );

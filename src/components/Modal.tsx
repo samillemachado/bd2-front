@@ -15,7 +15,6 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
   postRecado,
@@ -29,16 +28,16 @@ interface ModalRecadoProps {
   isOpen: boolean;
   actionCancel: () => void;
   idEdition?: number;
+  userId: number;
 }
 
 const ModalRecado: React.FC<ModalRecadoProps> = ({
   isOpen,
   actionCancel,
   idEdition,
+  userId,
 }) => {
   const dispatch = useAppDispatch();
-
-  const location = useLocation();
 
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
@@ -65,14 +64,15 @@ const ModalRecado: React.FC<ModalRecadoProps> = ({
     setStatusRec("");
   };
 
-  const salvarRecado = () => {
+  const salvarRecado = (userId: number) => {
     const novoRecado: Recado = {
       title: title,
       description: description,
       statusRec,
       isArquivado,
-      userId: location.state.id,
+      userId: userId,
     };
+
     dispatch(postRecado(novoRecado));
     closeModal();
   };
@@ -82,7 +82,7 @@ const ModalRecado: React.FC<ModalRecadoProps> = ({
     setOpenModal(false);
   };
 
-  const editarRecado = () => {
+  const editarRecado = (userId: number) => {
     dispatch(
       updateRecado({
         id: idEdition!,
@@ -90,7 +90,7 @@ const ModalRecado: React.FC<ModalRecadoProps> = ({
         description: description,
         statusRec: statusRec,
         isArquivado: isArquivado,
-        userId: location.state.id,
+        userId: userId,
       })
     );
     dispatch(
@@ -101,7 +101,7 @@ const ModalRecado: React.FC<ModalRecadoProps> = ({
           description: description,
           statusRec: statusRec,
           isArquivado: isArquivado,
-          userId: location.state.id,
+          userId: userId,
         },
       })
     );
@@ -152,7 +152,9 @@ const ModalRecado: React.FC<ModalRecadoProps> = ({
           <Stack direction="row" spacing={2}>
             <Button
               variant="contained"
-              onClick={() => (idEdition ? editarRecado() : salvarRecado())}
+              onClick={() =>
+                idEdition ? editarRecado(userId) : salvarRecado(userId)
+              }
             >
               Salvar
             </Button>
