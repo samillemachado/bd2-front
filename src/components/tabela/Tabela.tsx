@@ -28,21 +28,17 @@ import Filter from "../Filter";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import { upBadgeNum } from "../../store/modules/componentes/BadgeSlice";
-import { useLocation } from "react-router-dom";
 import {
   getAllUsers,
   selectAllUsers,
+  selectUserById,
 } from "../../store/modules/users/UsersSlice";
 
 export default function Tabela() {
-  const location = useLocation();
-  const userLogando: UserLogando = location.state;
-
   const dispatch = useAppDispatch();
   // const filtro = useAppSelector((state) => state.filter);
-  // const userLogado = useAppSelector(selectUserLogado);
 
-  const usersRdx = useAppSelector(selectAllUsers);
+  const usersRdx: User[] = useAppSelector(selectAllUsers);
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [idRecado, setIdRecado] = useState<number>();
@@ -58,18 +54,30 @@ export default function Tabela() {
   const userLogado: User | undefined = usersRdx.find(
     (user) => user.email === emailUserLogando
   );
+
   //ENTREI NA PÁGINA
   useEffect(() => {
     if (userLogado) {
       dispatch(getAllRecados(userLogado.id!));
       setUserId(userLogado.id!);
     }
-
     // if (filtro) {
     //   dispatch(filterRecado(filtro));
     // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isButtonClicked, userLogado]);
+
+  useEffect(() => {
+    dispatch(getAllUsers());
+    console.log("l=" + listaRecadosUsersRdx.length);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listaRecadosUsersRdx.length]);
+
+  useEffect(() => {
+    dispatch(getAllUsers());
+    console.log("u=" + userLogado?.recados.length);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userLogado?.recados.length]);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -110,21 +118,16 @@ export default function Tabela() {
         userId: userLogado!.id,
       })
     );
-    dispatch(upBadgeNum(sizeLista));
+    dispatch(upBadgeNum(sizeListaArquivados));
   };
 
   const buttonClicked = () => {
     setIsButtonClicked(!isButtonClicked);
   };
 
-  const sizeLista = listaRecadosUsersRdx.filter(
+  const sizeListaArquivados = listaRecadosUsersRdx.filter(
     (recado) => recado.isArquivado === true
   ).length;
-
-  useEffect(() => {
-    dispatch(getAllUsers());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sizeLista]);
 
   return (
     <>
@@ -151,7 +154,10 @@ export default function Tabela() {
         >
           <Filter />
           <div onClick={() => buttonClicked()}>
-            <BadgeButton isClicked={isButtonClicked} numEmblema={sizeLista} />
+            <BadgeButton
+              isClicked={isButtonClicked}
+              numEmblema={sizeListaArquivados}
+            />
           </div>
         </Grid>
         <Grid item xs={12}>

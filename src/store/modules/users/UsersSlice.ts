@@ -67,9 +67,8 @@ const adapter = createEntityAdapter<User>({
   selectId: (item) => item.id!,
 });
 
-export const { selectAll: selectAllUsers, selectById } = adapter.getSelectors(
-  (state: RootState) => state.users
-);
+export const { selectAll: selectAllUsers, selectById: selectUserById } =
+  adapter.getSelectors((state: RootState) => state.users);
 
 const UsersSlice = createSlice({
   name: "users",
@@ -77,6 +76,7 @@ const UsersSlice = createSlice({
     loading: false,
   }),
   reducers: {
+    setAll: adapter.setAll,
     addOne: adapter.addOne,
     updateOne: adapter.updateOne,
     removeOne: adapter.removeOne,

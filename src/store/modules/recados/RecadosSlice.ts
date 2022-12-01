@@ -89,6 +89,7 @@ const RecadosSlice = createSlice({
     loading: false,
   }),
   reducers: {
+    setAll: adapter.setAll,
     addOne: adapter.addOne,
     updateOne: adapter.updateOne,
     removeOne: adapter.removeOne,
